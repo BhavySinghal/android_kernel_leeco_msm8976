@@ -61,4 +61,7 @@ obj-$(CONFIG_COMPAT) += mdss_compat_utils.o
 obj-$(CONFIG_FB_MSM_MDSS) += mdss_livedisplay.o
 
 obj-$(CONFIG_FB_MSM_MDSS_KCAL_CTRL) += mdss_mdp_kcal_ctrl.o
+<<<<<<< HEAD
 >>>>>>> 8c570b4... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+>>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
