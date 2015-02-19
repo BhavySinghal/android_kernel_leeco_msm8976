@@ -288,7 +288,7 @@ static void kcal_apply_values(struct kcal_lut_data *lut_data)
 	lut_data->blue = (lut_data->blue < lut_data->minimum) ?
 		lut_data->minimum : lut_data->blue;
 
-	mdss_mdp_pp_kcal_update(lut_data->red, lut_data->green, lut_data->blue);
+	mdss_mdp_pp_kcal_update(lut_data);
 }
 
 static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
@@ -417,6 +417,7 @@ static ssize_t kcal_enable_store(struct device *dev,
 	lut_data->enable = kcal_enable;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
@@ -424,6 +425,9 @@ static ssize_t kcal_enable_store(struct device *dev,
 =======
 	mdss_mdp_pp_kcal_enable(lut_data->enable ? true : false);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	mdss_mdp_pp_kcal_update(lut_data);
+>>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
 
 	return count;
 }
@@ -469,11 +473,15 @@ static ssize_t kcal_invert_store(struct device *dev,
 	lut_data->invert = kcal_invert;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
 	mdss_mdp_pp_kcal_invert(lut_data->invert);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	mdss_mdp_pp_kcal_invert(lut_data);
+>>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
 
 	return count;
 }
@@ -715,6 +723,7 @@ static int __devinit kcal_ctrl_probe(struct platform_device *pdev)
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	platform_set_drvdata(pdev, lut_data);
 
 	lut_data->enable = 0x1;
@@ -737,6 +746,8 @@ static int __devinit kcal_ctrl_probe(struct platform_device *pdev)
 
 	mdss_mdp_pp_kcal_update(NUM_QLUT, NUM_QLUT, NUM_QLUT);
 
+=======
+>>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
 	lut_data->red = lut_data->green = lut_data->blue = NUM_QLUT;
 	lut_data->minimum = 35;
 	lut_data->enable = 1;
