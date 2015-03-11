@@ -23,12 +23,18 @@
 
 #include "mdss_mdp.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #define DEF_PCC 0x100
+=======
+
+#define NUM_QLUT 0x100
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 #define DEF_PA 0xff
 #define PCC_ADJ 0x80
 
 struct kcal_lut_data {
+<<<<<<< HEAD
 	int red;
 	int green;
 	int blue;
@@ -42,6 +48,21 @@ struct kcal_lut_data {
 };
 
 static uint32_t igc_inverted[IGC_LUT_ENTRIES] = {
+=======
+    int red;
+    int green;
+    int blue;
+    int minimum;
+    int enable;
+    int invert;
+    int sat;
+    int hue;
+    int val;
+    int cont;
+};
+
+static uint32_t igc_Table_Inverted[IGC_LUT_ENTRIES] = {
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 	267390960, 266342368, 265293776, 264245184,
 	263196592, 262148000, 261099408, 260050816,
 	259002224, 257953632, 256905040, 255856448,
@@ -108,7 +129,11 @@ static uint32_t igc_inverted[IGC_LUT_ENTRIES] = {
 	3145776, 2097184, 1048592, 0
 };
 
+<<<<<<< HEAD
 static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
+=======
+static uint32_t igc_Table_RGB[IGC_LUT_ENTRIES] = {
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 	4080, 4064, 4048, 4032, 4016, 4000, 3984, 3968, 3952, 3936, 3920, 3904,
 	3888, 3872, 3856, 3840, 3824, 3808, 3792, 3776, 3760, 3744, 3728, 3712,
 	3696, 3680, 3664, 3648, 3632, 3616, 3600, 3584, 3568, 3552, 3536, 3520,
@@ -133,6 +158,7 @@ static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
 	48, 32, 16, 0
 };
 
+<<<<<<< HEAD
 static int mdss_mdp_kcal_display_commit(void)
 {
 	int i;
@@ -155,12 +181,16 @@ static int mdss_mdp_kcal_display_commit(void)
 }
 
 static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
+=======
+static void mdss_mdp_pp_kcal_update(struct kcal_lut_data *lut_data)
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 {
 	u32 copyback = 0;
 	struct mdp_pcc_cfg_data pcc_config;
 
 	memset(&pcc_config, 0, sizeof(struct mdp_pcc_cfg_data));
 
+<<<<<<< HEAD
 	lut_data->red = lut_data->red < lut_data->minimum ?
 		lut_data->minimum : lut_data->red;
 	lut_data->green = lut_data->green < lut_data->minimum ?
@@ -172,6 +202,11 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 	pcc_config.ops = lut_data->enable ?
 		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
+=======
+	pcc_config.block = MDP_LOGICAL_BLOCK_DISP_0;
+	pcc_config.ops = lut_data->enable ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
+		MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 	pcc_config.r.r = lut_data->red * PCC_ADJ;
 	pcc_config.g.g = lut_data->green * PCC_ADJ;
 	pcc_config.b.b = lut_data->blue * PCC_ADJ;
@@ -179,6 +214,7 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 	mdss_mdp_pcc_config(&pcc_config, &copyback);
 }
 
+<<<<<<< HEAD
 static void mdss_mdp_kcal_read_pcc(struct kcal_lut_data *lut_data)
 {
 	u32 copyback = 0;
@@ -203,6 +239,9 @@ static void mdss_mdp_kcal_read_pcc(struct kcal_lut_data *lut_data)
 }
 
 static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
+=======
+static void mdss_mdp_pp_kcal_pa(struct kcal_lut_data *lut_data)
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 {
 	u32 copyback = 0;
 	struct mdp_pa_cfg_data pa_config;
@@ -213,9 +252,13 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 		memset(&pa_config, 0, sizeof(struct mdp_pa_cfg_data));
 
 		pa_config.block = MDP_LOGICAL_BLOCK_DISP_0;
+<<<<<<< HEAD
 		pa_config.pa_data.flags = lut_data->enable ?
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
+=======
+		pa_config.pa_data.flags = MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE;
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 		pa_config.pa_data.hue_adj = lut_data->hue;
 		pa_config.pa_data.sat_adj = lut_data->sat;
 		pa_config.pa_data.val_adj = lut_data->val;
@@ -226,9 +269,13 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 		memset(&pa_v2_config, 0, sizeof(struct mdp_pa_v2_cfg_data));
 
 		pa_v2_config.block = MDP_LOGICAL_BLOCK_DISP_0;
+<<<<<<< HEAD
 		pa_v2_config.pa_v2_data.flags = lut_data->enable ?
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
+=======
+		pa_v2_config.pa_v2_data.flags = MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE;
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_HUE_ENABLE;
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_HUE_MASK;
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_SAT_ENABLE;
@@ -246,7 +293,11 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 	}
 }
 
+<<<<<<< HEAD
 static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
+=======
+static void mdss_mdp_pp_kcal_invert(struct kcal_lut_data *lut_data)
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 {
 	u32 copyback = 0, copy_from_kernel = 1;
 	struct mdp_igc_lut_data igc_config;
@@ -254,6 +305,7 @@ static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
 	memset(&igc_config, 0, sizeof(struct mdp_igc_lut_data));
 
 	igc_config.block = MDP_LOGICAL_BLOCK_DISP_0;
+<<<<<<< HEAD
 	igc_config.ops = lut_data->invert && lut_data->enable ?
 		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
@@ -275,12 +327,19 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 		(kcal_g < 1 || kcal_g > 256) || (kcal_b < 1 || kcal_b > 256))
 =======
 #include "mdss_mdp_kcal_ctrl.h"
+=======
+	igc_config.ops = lut_data->invert ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
+		MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
+	igc_config.len = IGC_LUT_ENTRIES;
+	igc_config.c0_c1_data = &igc_Table_Inverted[0];
+	igc_config.c2_data = &igc_Table_RGB[0];
+
+	mdss_mdp_igc_lut_config(&igc_config, &copyback, copy_from_kernel);
+}
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 
 static void kcal_apply_values(struct kcal_lut_data *lut_data)
 {
-	/* gc_lut_* will save lut values even when disabled and
-	 * properly restore them on enable.
-	 */
 	lut_data->red = (lut_data->red < lut_data->minimum) ?
 		lut_data->minimum : lut_data->red;
 	lut_data->green = (lut_data->green < lut_data->minimum) ?
@@ -850,5 +909,9 @@ module_exit(kcal_ctrl_exit);
 late_initcall(kcal_ctrl_init);
 module_exit(kcal_ctrl_exit);
 
+<<<<<<< HEAD
 MODULE_DESCRIPTION("LCD KCAL Driver");
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+MODULE_DESCRIPTION("MDSS-MDP5 KCAL Driver");
+>>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
