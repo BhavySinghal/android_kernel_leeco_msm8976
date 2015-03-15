@@ -160,15 +160,22 @@ static uint32_t igc_Table_RGB[IGC_LUT_ENTRIES] = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int mdss_mdp_kcal_display_commit(void)
 {
 	int i;
 	int ret = 0;
+=======
+static bool mdss_mdp_kcal_is_panel_on(void)
+{
+	int i;
+>>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
 	struct mdss_mdp_ctl *ctl;
 	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
 
 	for (i = 0; i < mdata->nctl; i++) {
 		ctl = mdata->ctl_off + i;
+<<<<<<< HEAD
 		/* pp setup requires mfd */
 		if (mdss_mdp_ctl_is_power_on(ctl) && ctl->mfd &&
 				ctl->mfd->index == 0) {
@@ -186,6 +193,15 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 static void mdss_mdp_pp_kcal_update(struct kcal_lut_data *lut_data)
 >>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 =======
+=======
+		if (mdss_mdp_ctl_is_power_on(ctl))
+			return true;
+	}
+
+	return false;
+}
+
+>>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
 static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
 {
@@ -397,6 +413,9 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 		return -EINVAL;
 
+	if (!mdss_mdp_kcal_is_panel_on())
+		return -EINVAL;
+
 	lut_data->red = kcal_r;
 	lut_data->green = kcal_g;
 	lut_data->blue = kcal_b;
@@ -449,6 +468,9 @@ static ssize_t kcal_min_store(struct device *dev,
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 		return -EINVAL;
 
+	if (!mdss_mdp_kcal_is_panel_on())
+		return -EINVAL;
+
 	lut_data->minimum = kcal_min;
 
 <<<<<<< HEAD
@@ -497,6 +519,9 @@ static ssize_t kcal_enable_store(struct device *dev,
 
 	if (lut_data->enable == kcal_enable)
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+		return -EINVAL;
+
+	if (!mdss_mdp_kcal_is_panel_on())
 		return -EINVAL;
 
 	lut_data->enable = kcal_enable;
@@ -561,6 +586,9 @@ static ssize_t kcal_invert_store(struct device *dev,
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 		return -EINVAL;
 
+	if (!mdss_mdp_kcal_is_panel_on())
+		return -EINVAL;
+
 	lut_data->invert = kcal_invert;
 
 <<<<<<< HEAD
@@ -615,6 +643,9 @@ static ssize_t kcal_sat_store(struct device *dev,
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 		return -EINVAL;
 
+	if (!mdss_mdp_kcal_is_panel_on())
+		return -EINVAL;
+
 	lut_data->sat = kcal_sat;
 
 <<<<<<< HEAD
@@ -663,6 +694,9 @@ static ssize_t kcal_hue_store(struct device *dev,
 
 	if (kcal_hue < 0 || kcal_hue > 1536)
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+		return -EINVAL;
+
+	if (!mdss_mdp_kcal_is_panel_on())
 		return -EINVAL;
 
 	lut_data->hue = kcal_hue;
@@ -715,6 +749,9 @@ static ssize_t kcal_val_store(struct device *dev,
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 		return -EINVAL;
 
+	if (!mdss_mdp_kcal_is_panel_on())
+		return -EINVAL;
+
 	lut_data->val = kcal_val;
 
 <<<<<<< HEAD
@@ -763,6 +800,9 @@ static ssize_t kcal_cont_store(struct device *dev,
 
 	if (kcal_cont < 128 || kcal_cont > 383)
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+		return -EINVAL;
+
+	if (!mdss_mdp_kcal_is_panel_on())
 		return -EINVAL;
 
 	lut_data->cont = kcal_cont;
