@@ -68,9 +68,14 @@ config FB_MSM_MDSS_KCAL_CTRL
 	bool "MDSS color control"
 	---help---
 <<<<<<< HEAD
+<<<<<<< HEAD
 	  Enable sysfs for post-processing control of mdss-mdp5 display
 	  controllers in MDSS.
 =======
 	  Enable sysfs for rgb/lut control for mdss-mdp display controllers
 	  in the MDSS sub-system.
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	  Enable sysfs for post-processing control of mdss-mdp5 display
+	  controllers in MDSS.
+>>>>>>> 0c29653... msm: mdss: KCAL: Update Kconfig description
