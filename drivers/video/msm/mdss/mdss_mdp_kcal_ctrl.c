@@ -21,6 +21,15 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
+#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS) && defined(CONFIG_FB)
+#include <mach/mmi_panel_notifier.h>
+#include <linux/notifier.h>
+#include <linux/fb.h>
+#elif defined(CONFIG_FB)
+#include <linux/notifier.h>
+#include <linux/fb.h>
+#endif
+
 #include "mdss_mdp.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -36,8 +45,18 @@
 struct kcal_lut_data {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
+=======
+#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS) && defined(CONFIG_FB)
+	struct mmi_notifier panel_nb;
+#elif defined(CONFIG_FB)
+	struct device dev;
+	struct notifier_block panel_nb;
+#endif
+	bool queue_changes;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 	int red;
 	int green;
 	int blue;
@@ -213,6 +232,13 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 {
 	u32 copyback = 0;
 	struct mdp_pcc_cfg_data pcc_config;
+
+	lut_data->red = lut_data->red < lut_data->minimum ?
+		lut_data->minimum : lut_data->red;
+	lut_data->green = lut_data->green < lut_data->minimum ?
+		lut_data->minimum : lut_data->green;
+	lut_data->blue = lut_data->blue < lut_data->minimum ?
+		lut_data->minimum : lut_data->blue;
 
 	memset(&pcc_config, 0, sizeof(struct mdp_pcc_cfg_data));
 
@@ -410,18 +436,6 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 }
 >>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
 
-static void kcal_apply_values(struct kcal_lut_data *lut_data)
-{
-	lut_data->red = lut_data->red < lut_data->minimum ?
-		lut_data->minimum : lut_data->red;
-	lut_data->green = lut_data->green < lut_data->minimum ?
-		lut_data->minimum : lut_data->green;
-	lut_data->blue = lut_data->blue < lut_data->minimum ?
-		lut_data->minimum : lut_data->blue;
-
-	mdss_mdp_kcal_update_pcc(lut_data);
-}
-
 static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 						const char *buf, size_t count)
 {
@@ -449,19 +463,23 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->red = kcal_r;
 	lut_data->green = kcal_g;
 	lut_data->blue = kcal_b;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
 	kcal_apply_values(lut_data);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pcc(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -517,17 +535,21 @@ static ssize_t kcal_min_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->minimum = kcal_min;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
 	kcal_apply_values(lut_data);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pcc(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -583,11 +605,9 @@ static ssize_t kcal_enable_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->enable = kcal_enable;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -606,6 +626,14 @@ static ssize_t kcal_enable_store(struct device *dev,
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on()) {
+		mdss_mdp_kcal_update_pcc(lut_data);
+		mdss_mdp_kcal_update_pa(lut_data);
+		mdss_mdp_kcal_update_igc(lut_data);
+	} else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -661,11 +689,9 @@ static ssize_t kcal_invert_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->invert = kcal_invert;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -680,6 +706,12 @@ static ssize_t kcal_invert_store(struct device *dev,
 =======
 	mdss_mdp_kcal_update_igc(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_igc(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -730,11 +762,9 @@ static ssize_t kcal_sat_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->sat = kcal_sat;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
@@ -745,6 +775,12 @@ static ssize_t kcal_sat_store(struct device *dev,
 =======
 	mdss_mdp_kcal_update_pa(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pa(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -795,11 +831,9 @@ static ssize_t kcal_hue_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->hue = kcal_hue;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
@@ -810,6 +844,12 @@ static ssize_t kcal_hue_store(struct device *dev,
 =======
 	mdss_mdp_kcal_update_pa(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pa(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -860,11 +900,9 @@ static ssize_t kcal_val_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->val = kcal_val;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
@@ -875,6 +913,12 @@ static ssize_t kcal_val_store(struct device *dev,
 =======
 	mdss_mdp_kcal_update_pa(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pa(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -925,11 +969,9 @@ static ssize_t kcal_cont_store(struct device *dev,
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
-	if (!mdss_mdp_kcal_is_panel_on())
-		return -EPERM;
-
 	lut_data->cont = kcal_cont;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
@@ -940,6 +982,12 @@ static ssize_t kcal_cont_store(struct device *dev,
 =======
 	mdss_mdp_kcal_update_pa(lut_data);
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
+=======
+	if (mdss_mdp_kcal_is_panel_on())
+		mdss_mdp_kcal_update_pa(lut_data);
+	else
+		lut_data->queue_changes = true;
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	return count;
 }
@@ -966,6 +1014,39 @@ static DEVICE_ATTR(kcal_hue, S_IWUSR | S_IRUGO, kcal_hue_show, kcal_hue_store);
 static DEVICE_ATTR(kcal_val, S_IWUSR | S_IRUGO, kcal_val_show, kcal_val_store);
 static DEVICE_ATTR(kcal_cont, S_IWUSR | S_IRUGO, kcal_cont_show,
 	kcal_cont_store);
+
+static int mdss_mdp_kcal_update_queue(struct device *dev)
+{
+	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
+
+	if (lut_data->queue_changes) {
+		mdss_mdp_kcal_update_pcc(lut_data);
+		mdss_mdp_kcal_update_pa(lut_data);
+		mdss_mdp_kcal_update_igc(lut_data);
+		lut_data->queue_changes = false;
+	}
+
+	return 0;
+}
+
+#if defined(CONFIG_FB) && !defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
+static int fb_notifier_callback(struct notifier_block *nb,
+	unsigned long event, void *data)
+{
+	int *blank;
+	struct fb_event *evdata = data;
+	struct kcal_lut_data *lut_data =
+		container_of(nb, struct kcal_lut_data, panel_nb);
+
+	if (evdata && evdata->data && event == FB_EVENT_BLANK) {
+		blank = evdata->data;
+		if (*blank == FB_BLANK_UNBLANK)
+			mdss_mdp_kcal_update_queue(&lut_data->dev);
+	}
+
+	return 0;
+}
+#endif
 
 static int kcal_ctrl_probe(struct platform_device *pdev)
 =======
@@ -1012,6 +1093,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	platform_set_drvdata(pdev, lut_data);
 
 	lut_data->enable = 0x1;
@@ -1036,6 +1118,10 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 
 =======
 >>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
+=======
+	platform_set_drvdata(pdev, lut_data);
+
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 	lut_data->red = lut_data->green = lut_data->blue = NUM_QLUT;
 	lut_data->minimum = 35;
 	lut_data->enable = 1;
@@ -1045,8 +1131,30 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	lut_data->val = DEF_PA;
 	lut_data->cont = DEF_PA;
 
+<<<<<<< HEAD
 	platform_set_drvdata(pdev, lut_data);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	lut_data->queue_changes = false;
+
+#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
+	lut_data->panel_nb.display_on = mdss_mdp_kcal_update_queue;
+	lut_data->panel_nb.dev = &pdev->dev;
+	ret = mmi_panel_register_notifier(&lut_data->panel_nb);
+	if (ret) {
+		pr_err("%s: unable to register MMI notifier\n", __func__);
+		goto out_free_mem;
+	}
+#elif defined(CONFIG_FB)
+	lut_data->dev = pdev->dev;
+	lut_data->panel_nb.notifier_call = fb_notifier_callback;
+	ret = fb_register_client(&lut_data->panel_nb);
+	if (ret) {
+		pr_err("%s: unable to register fb notifier\n", __func__);
+		goto out_free_mem;
+	}
+#endif
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 
 	ret = device_create_file(&pdev->dev, &dev_attr_kcal);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_min);
@@ -1056,6 +1164,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_hue);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_val);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_cont);
+<<<<<<< HEAD
 <<<<<<< HEAD
 	if (ret) {
 		pr_err("%s: unable to create sysfs entries\n", __func__);
@@ -1069,8 +1178,17 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 {
 =======
 	if (ret)
+=======
+	if (ret) {
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 		pr_err("%s: unable to create sysfs entries\n", __func__);
+		goto out_free_mem;
+	}
 
+	return 0;
+
+out_free_mem:
+	kfree(lut_data);
 	return ret;
 }
 
@@ -1089,7 +1207,16 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 	device_remove_file(&pdev->dev, &dev_attr_kcal_cont);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
+	mmi_panel_unregister_notifier(&lut_data->panel_nb);
+#elif defined(CONFIG_FB)
+	fb_unregister_client(&lut_data->panel_nb);
+#endif
+
+>>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 	kfree(lut_data);
 
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
