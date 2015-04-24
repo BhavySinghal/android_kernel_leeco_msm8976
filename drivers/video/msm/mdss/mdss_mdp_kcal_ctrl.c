@@ -37,8 +37,12 @@
 #define DEF_PCC 0x100
 =======
 
+<<<<<<< HEAD
 #define NUM_QLUT 0x100
 >>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
+=======
+#define DEF_PCC 0x100
+>>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 #define DEF_PA 0xff
 #define PCC_ADJ 0x80
 
@@ -1081,10 +1085,14 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	struct kcal_lut_data *lut_data;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	lut_data = devm_kzalloc(&pdev->dev, sizeof(*lut_data), GFP_KERNEL);
 =======
 	lut_data = kzalloc(sizeof(*lut_data), GFP_KERNEL);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+	lut_data = devm_kzalloc(&pdev->dev, sizeof(*lut_data), GFP_KERNEL);
+>>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 	if (!lut_data) {
 		pr_err("%s: failed to allocate memory for lut_data\n",
 			__func__);
@@ -1121,13 +1129,22 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 =======
 	platform_set_drvdata(pdev, lut_data);
 
+<<<<<<< HEAD
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 	lut_data->red = lut_data->green = lut_data->blue = NUM_QLUT;
 	lut_data->minimum = 35;
 	lut_data->enable = 1;
 	lut_data->invert = 0;
+=======
+	lut_data->enable = 0x1;
+	lut_data->red = DEF_PCC;
+	lut_data->green = DEF_PCC;
+	lut_data->blue = DEF_PCC;
+	lut_data->minimum = 0x23;
+	lut_data->invert = 0x0;
+	lut_data->hue = 0x0;
+>>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 	lut_data->sat = DEF_PA;
-	lut_data->hue = 0;
 	lut_data->val = DEF_PA;
 	lut_data->cont = DEF_PA;
 
@@ -1137,13 +1154,17 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 =======
 	lut_data->queue_changes = false;
 
+	mdss_mdp_kcal_update_pcc(lut_data);
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_update_igc(lut_data);
+
 #if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
 	lut_data->panel_nb.display_on = mdss_mdp_kcal_update_queue;
 	lut_data->panel_nb.dev = &pdev->dev;
 	ret = mmi_panel_register_notifier(&lut_data->panel_nb);
 	if (ret) {
 		pr_err("%s: unable to register MMI notifier\n", __func__);
-		goto out_free_mem;
+		return ret;
 	}
 #elif defined(CONFIG_FB)
 	lut_data->dev = pdev->dev;
@@ -1151,7 +1172,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	ret = fb_register_client(&lut_data->panel_nb);
 	if (ret) {
 		pr_err("%s: unable to register fb notifier\n", __func__);
-		goto out_free_mem;
+		return ret;
 	}
 #endif
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
@@ -1168,6 +1189,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 <<<<<<< HEAD
 	if (ret) {
 		pr_err("%s: unable to create sysfs entries\n", __func__);
+<<<<<<< HEAD
 		return ret;
 	}
 
@@ -1183,12 +1205,19 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 		pr_err("%s: unable to create sysfs entries\n", __func__);
 		goto out_free_mem;
+=======
+		goto out_notifier;
+>>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 	}
 
 	return 0;
 
-out_free_mem:
-	kfree(lut_data);
+out_notifier:
+#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
+	mmi_panel_unregister_notifier(&lut_data->panel_nb);
+#elif defined(CONFIG_FB)
+	fb_unregister_client(&lut_data->panel_nb);
+#endif
 	return ret;
 }
 
@@ -1216,10 +1245,13 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 	fb_unregister_client(&lut_data->panel_nb);
 #endif
 
+<<<<<<< HEAD
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
 	kfree(lut_data);
 
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+>>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 	return 0;
 }
 
