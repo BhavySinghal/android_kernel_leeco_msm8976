@@ -391,6 +391,7 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
 =======
 static void mdss_mdp_pp_kcal_invert(struct kcal_lut_data *lut_data)
@@ -436,6 +437,8 @@ static void mdss_mdp_kcal_read_pa(struct kcal_lut_data *lut_data)
 }
 
 >>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
+=======
+>>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
 >>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
 {
@@ -888,6 +891,7 @@ static ssize_t kcal_sat_show(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->sat);
 =======
 	return sprintf(buf, "%d\n", lut_data->sat);
@@ -898,6 +902,8 @@ static ssize_t kcal_sat_show(struct device *dev,
 		mdss_mdp_kcal_read_pa(lut_data);
 
 >>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
+=======
+>>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->sat);
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
@@ -963,6 +969,7 @@ static ssize_t kcal_hue_show(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->hue);
 =======
 	return sprintf(buf, "%d\n", lut_data->hue);
@@ -973,6 +980,8 @@ static ssize_t kcal_hue_show(struct device *dev,
 		mdss_mdp_kcal_read_pa(lut_data);
 
 >>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
+=======
+>>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->hue);
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
@@ -1038,6 +1047,7 @@ static ssize_t kcal_val_show(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
@@ -1048,6 +1058,8 @@ static ssize_t kcal_val_show(struct device *dev,
 	return sprintf(buf, "%d\n", lut_data->val);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 =======
+=======
+>>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->val);
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
@@ -1113,11 +1125,14 @@ static ssize_t kcal_cont_show(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
 		mdss_mdp_kcal_read_pa(lut_data);
 
 >>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
+=======
+>>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->cont);
 }
 
