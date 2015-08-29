@@ -21,15 +21,6 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
-#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS) && defined(CONFIG_FB)
-#include <mach/mmi_panel_notifier.h>
-#include <linux/notifier.h>
-#include <linux/fb.h>
-#elif defined(CONFIG_FB)
-#include <linux/notifier.h>
-#include <linux/fb.h>
-#endif
-
 #include "mdss_mdp.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -50,6 +41,7 @@ struct kcal_lut_data {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 =======
@@ -61,6 +53,8 @@ struct kcal_lut_data {
 #endif
 	bool queue_changes;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	int red;
 	int green;
 	int blue;
@@ -198,6 +192,7 @@ static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int mdss_mdp_kcal_display_commit(void)
 {
 	int i;
@@ -207,19 +202,31 @@ static bool mdss_mdp_kcal_is_panel_on(void)
 {
 	int i;
 >>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
+=======
+static int mdss_mdp_kcal_display_commit(void)
+{
+	int i;
+	int ret = 0;
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	struct mdss_mdp_ctl *ctl;
 	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
 
 	for (i = 0; i < mdata->nctl; i++) {
 		ctl = mdata->ctl_off + i;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		/* pp setup requires mfd */
 		if (mdss_mdp_ctl_is_power_on(ctl) && ctl->mfd &&
 				ctl->mfd->index == 0) {
+=======
+		/* pp setup requires mfd */
+		if ((mdss_mdp_ctl_is_power_on(ctl)) && (ctl->mfd)) {
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 			ret = mdss_mdp_pp_setup(ctl);
 			if (ret)
 				pr_err("%s: setup failed: %d\n", __func__, ret);
 		}
+<<<<<<< HEAD
 	}
 
 	return ret;
@@ -233,9 +240,11 @@ static void mdss_mdp_pp_kcal_update(struct kcal_lut_data *lut_data)
 =======
 		if (mdss_mdp_ctl_is_power_on(ctl))
 			return true;
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	}
 
-	return false;
+	return ret;
 }
 
 >>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
@@ -248,6 +257,9 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 	memset(&pcc_config, 0, sizeof(struct mdp_pcc_cfg_data));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	lut_data->red = lut_data->red < lut_data->minimum ?
 		lut_data->minimum : lut_data->red;
 	lut_data->green = lut_data->green < lut_data->minimum ?
@@ -462,6 +474,7 @@ static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
 	mdss_mdp_igc_lut_config(&igc_config, &copyback, copy_from_kernel);
 }
 
+<<<<<<< HEAD
 static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 						const char *buf, size_t count)
 {
@@ -504,6 +517,8 @@ static void mdss_mdp_kcal_check_pcc(struct kcal_lut_data *lut_data)
 		lut_data->minimum : lut_data->blue;
 }
 
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 						const char *buf, size_t count)
 {
@@ -543,6 +558,7 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -558,6 +574,10 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pcc(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -567,6 +587,7 @@ static ssize_t kcal_show(struct device *dev, struct device_attribute *attr,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -582,6 +603,9 @@ static ssize_t kcal_show(struct device *dev, struct device_attribute *attr,
 =======
 	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
 		mdss_mdp_kcal_read_pcc(lut_data);
+=======
+	mdss_mdp_kcal_read_pcc(lut_data);
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 >>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 	return scnprintf(buf, PAGE_SIZE, "%d %d %d\n",
@@ -628,6 +652,7 @@ static ssize_t kcal_min_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -643,6 +668,10 @@ static ssize_t kcal_min_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pcc(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -704,10 +733,14 @@ static ssize_t kcal_enable_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
+<<<<<<< HEAD
 =======
 	mdss_mdp_pp_kcal_enable(lut_data->enable ? true : false);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
@@ -727,6 +760,8 @@ static ssize_t kcal_enable_store(struct device *dev,
 	} else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -788,6 +823,7 @@ static ssize_t kcal_invert_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -805,6 +841,10 @@ static ssize_t kcal_invert_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_igc(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -817,6 +857,7 @@ static ssize_t kcal_invert_show(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	/* IGC lut does not support reading regs in kernel space yet */
 
@@ -826,6 +867,8 @@ static ssize_t kcal_invert_show(struct device *dev,
 	return sprintf(buf, "%d\n", lut_data->invert);
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 =======
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->invert);
 >>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
@@ -865,6 +908,7 @@ static ssize_t kcal_sat_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -879,6 +923,10 @@ static ssize_t kcal_sat_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -943,6 +991,7 @@ static ssize_t kcal_hue_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -957,6 +1006,10 @@ static ssize_t kcal_hue_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1021,6 +1074,7 @@ static ssize_t kcal_val_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -1035,6 +1089,10 @@ static ssize_t kcal_val_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1099,6 +1157,7 @@ static ssize_t kcal_cont_store(struct device *dev,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
 =======
@@ -1113,6 +1172,10 @@ static ssize_t kcal_cont_store(struct device *dev,
 	else
 		lut_data->queue_changes = true;
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1148,39 +1211,6 @@ static DEVICE_ATTR(kcal_hue, S_IWUSR | S_IRUGO, kcal_hue_show, kcal_hue_store);
 static DEVICE_ATTR(kcal_val, S_IWUSR | S_IRUGO, kcal_val_show, kcal_val_store);
 static DEVICE_ATTR(kcal_cont, S_IWUSR | S_IRUGO, kcal_cont_show,
 	kcal_cont_store);
-
-static int mdss_mdp_kcal_update_queue(struct device *dev)
-{
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (lut_data->queue_changes) {
-		mdss_mdp_kcal_update_pcc(lut_data);
-		mdss_mdp_kcal_update_pa(lut_data);
-		mdss_mdp_kcal_update_igc(lut_data);
-		lut_data->queue_changes = false;
-	}
-
-	return 0;
-}
-
-#if defined(CONFIG_FB) && !defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
-static int fb_notifier_callback(struct notifier_block *nb,
-	unsigned long event, void *data)
-{
-	int *blank;
-	struct fb_event *evdata = data;
-	struct kcal_lut_data *lut_data =
-		container_of(nb, struct kcal_lut_data, panel_nb);
-
-	if (evdata && evdata->data && event == FB_EVENT_BLANK) {
-		blank = evdata->data;
-		if (*blank == FB_BLANK_UNBLANK)
-			mdss_mdp_kcal_update_queue(&lut_data->dev);
-	}
-
-	return 0;
-}
-#endif
 
 static int kcal_ctrl_probe(struct platform_device *pdev)
 =======
@@ -1245,6 +1275,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	lut_data->val = DEF_PA;
 	lut_data->cont = DEF_PA;
 
+<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
@@ -1306,6 +1337,12 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	}
 #endif
 >>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
+=======
+	mdss_mdp_kcal_update_pcc(lut_data);
+	mdss_mdp_kcal_update_pa(lut_data);
+	mdss_mdp_kcal_update_igc(lut_data);
+	mdss_mdp_kcal_display_commit();
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	ret = device_create_file(&pdev->dev, &dev_attr_kcal);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_min);
@@ -1319,6 +1356,7 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 <<<<<<< HEAD
 	if (ret) {
 		pr_err("%s: unable to create sysfs entries\n", __func__);
+<<<<<<< HEAD
 <<<<<<< HEAD
 		return ret;
 	}
@@ -1338,24 +1376,22 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 =======
 		goto out_notifier;
 >>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
+=======
+		return ret;
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	}
 
 	return 0;
-
-out_notifier:
-#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
-	mmi_panel_unregister_notifier(&lut_data->panel_nb);
-#elif defined(CONFIG_FB)
-	fb_unregister_client(&lut_data->panel_nb);
-#endif
-	return ret;
 }
 
 static int kcal_ctrl_remove(struct platform_device *pdev)
 {
+<<<<<<< HEAD
 	struct kcal_lut_data *lut_data = platform_get_drvdata(pdev);
 
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	device_remove_file(&pdev->dev, &dev_attr_kcal);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_min);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_enable);
@@ -1365,6 +1401,7 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 	device_remove_file(&pdev->dev, &dev_attr_kcal_val);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_cont);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1382,6 +1419,8 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 >>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
 =======
 >>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
+=======
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	return 0;
 }
 
@@ -1417,10 +1456,14 @@ static void __exit kcal_ctrl_exit(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 module_init(kcal_ctrl_init);
 module_exit(kcal_ctrl_exit);
 =======
 late_initcall(kcal_ctrl_init);
+=======
+module_init(kcal_ctrl_init);
+>>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 module_exit(kcal_ctrl_exit);
 <<<<<<< HEAD
 
