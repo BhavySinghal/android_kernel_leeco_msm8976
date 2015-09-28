@@ -220,8 +220,13 @@ static int mdss_mdp_kcal_display_commit(void)
 				ctl->mfd->index == 0) {
 =======
 		/* pp setup requires mfd */
+<<<<<<< HEAD
 		if ((mdss_mdp_ctl_is_power_on(ctl)) && (ctl->mfd)) {
 >>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
+=======
+		if (mdss_mdp_ctl_is_power_on(ctl) && ctl->mfd &&
+				ctl->mfd->index == 0) {
+>>>>>>> 2bf992c... msm: mdss: kcal: Only apply updates on index 0
 			ret = mdss_mdp_pp_setup(ctl);
 			if (ret)
 				pr_err("%s: setup failed: %d\n", __func__, ret);
