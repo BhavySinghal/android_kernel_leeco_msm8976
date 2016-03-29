@@ -694,4 +694,11 @@ source "arch/arm64/crypto/Kconfig"
 endif
 
 source "lib/Kconfig"
+<<<<<<< HEAD
 source "arch/arm64/product_list/Kconfig"
+=======
+
+source "arch/arm64/mm/Kconfig"
+
+source "arch/arm64/hotplug/Kconfig"
+>>>>>>> b08f43b... arm: Add cluster_plug hotplug driver
