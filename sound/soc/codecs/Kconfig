@@ -578,6 +578,7 @@ config SND_SOC_MSM_HDMI_CODEC_RX
 	help
 	HDMI audio drivers should be built only if the platform
         supports hdmi panel.
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 config SND_SOC_SMART_PA_TFA9890
@@ -595,3 +596,5 @@ config SND_SOC_SMART_PA_TFA9890
 config SOUND_CONTROL
 	bool "Sound control for wcd9335"
 >>>>>>> 263c5be... ASoC: wcd9335: Sound control
+=======
+>>>>>>> dcf575b... Switch to different sound control driver
