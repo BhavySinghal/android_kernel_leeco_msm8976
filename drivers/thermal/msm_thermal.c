@@ -3347,7 +3347,10 @@ static void do_freq_control(long temp)
 static void check_temp(struct work_struct *work)
 {
 	long temp = 0;
-	int ret = 0;
+ 	int ret = 0;
+
+	if (!msm_thermal_probed)
+		return;
 
 	do_therm_reset();
 
