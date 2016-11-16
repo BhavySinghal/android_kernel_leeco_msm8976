@@ -691,4 +691,8 @@ CONFIG_CRYPTO_SEQIV=y
 CONFIG_NET_NS=y
 CONFIG_VETH=y
 CONFIG_CLUSTER_PLUG=y
+<<<<<<< HEAD:arch/arm64/configs/s2_defconfig
 >>>>>>> cf04806... hydrogen:enable clusterplug:arch/arm64/configs/hydrogen_user_defconfig
+=======
+CONFIG_ADRENO_IDLER=y
+>>>>>>> 5ea000b3... enable aderno idler:arch/arm64/configs/hydrogen_user_defconfig
