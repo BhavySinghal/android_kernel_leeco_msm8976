@@ -2574,19 +2574,11 @@ scale_load_to_freq(u64 load, unsigned int src_freq, unsigned int dst_freq)
 	return div64_u64(load * (u64)src_freq, (u64)dst_freq);
 }
 
-void sched_get_cpus_busy(unsigned long *busy, const struct cpumask *query_cpus)
+unsigned long sched_get_busy(int cpu)
 {
 	unsigned long flags;
-	struct rq *rq;
- 	const int cpus = cpumask_weight(query_cpus);
- 	u64 load[cpus];
- 	unsigned int cur_freq[cpus], max_freq[cpus];
- 	int notifier_sent[cpus];
- 	int cpu, i = 0;
- 	unsigned int window_size;
- 
- 	if (unlikely(cpus == 0))
- 		return;
+	struct rq *rq = cpu_rq(cpu);
+	u64 load;
 
 	/*
 	 * This function could be called in timer context, and the
@@ -2594,8 +2586,13 @@ void sched_get_cpus_busy(unsigned long *busy, const struct cpumask *query_cpus)
 	 * that the window stats are current by doing an update.
 	 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 	raw_spin_lock_irqsave(&rq->lock, flags);
 	update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_clock(), 0);
+=======
+	raw_spin_lock_irqsave(&rq->lock, flags);
+	update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_ktime_clock(), 0);
+>>>>>>> 7d0c1d8... Revert "impulse governer"
 	load = rq->old_busy_time = rq->prev_runnable_sum;
 
 	/*
@@ -2618,6 +2615,7 @@ void sched_get_cpus_busy(unsigned long *busy, const struct cpumask *query_cpus)
 	} else {
 		load = scale_load_to_freq(load, cpu_max_freq(cpu),
 					 cpu_max_possible_freq(cpu));
+<<<<<<< HEAD
 =======
 	local_irq_save(flags);
  	for_each_cpu(cpu, query_cpus)
@@ -2640,46 +2638,19 @@ for_each_cpu(cpu, query_cpus) {
  
  		notifier_sent[i] = rq->notifier_sent;
 >>>>>>> 250f7cb... impulse governer
+=======
+>>>>>>> 7d0c1d8... Revert "impulse governer"
 		rq->notifier_sent = 0;
-		cur_freq[i] = rq->cur_freq;
- 		max_freq[i] = rq->max_freq;
- 		i++;
 	}
-	for_each_cpu(cpu, query_cpus)
- 		raw_spin_unlock(&(cpu_rq(cpu))->lock);
- 	local_irq_restore(flags)
 
-	i = 0;
- 	for_each_cpu(cpu, query_cpus) {
- 		rq = cpu_rq(cpu);
+	load = div64_u64(load, NSEC_PER_USEC);
 
-	if (!notifier_sent[i]) {
- 			load[i] = scale_load_to_freq(load[i], max_freq[i],
- 						     cur_freq[i]);
- 			if (load[i] > window_size)
- 				load[i] = window_size;
- 			load[i] = scale_load_to_freq(load[i], cur_freq[i],
- 						     rq->max_possible_freq);
- 		} else {
- 			load[i] = scale_load_to_freq(load[i], max_freq[i],
- 						     rq->max_possible_freq);
- 		}
-	busy[i] = div64_u64(load[i], NSEC_PER_USEC);
- 
- 		trace_sched_get_busy(cpu, busy[i]);
- 		i++;
- 	}
- }
-	unsigned long sched_get_busy(int cpu)
- 	{
- 	struct cpumask query_cpu = CPU_MASK_NONE;
- 	unsigned long busy;
- 
- 	cpumask_set_cpu(cpu, &query_cpu);
- 	sched_get_cpus_busy(&busy, &query_cpu);
- 
- 	return busy;
-	}
+	raw_spin_unlock_irqrestore(&rq->lock, flags);
+
+	trace_sched_get_busy(cpu, load);
+
+	return load;
+}
 
 void sched_set_io_is_busy(int val)
 {
