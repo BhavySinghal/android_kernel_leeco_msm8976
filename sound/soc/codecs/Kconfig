@@ -578,9 +578,7 @@ config SND_SOC_MSM_HDMI_CODEC_RX
 	help
 	HDMI audio drivers should be built only if the platform
         supports hdmi panel.
-<<<<<<< HEAD
 
-<<<<<<< HEAD
 config SND_SOC_SMART_PA_TFA9890
 	tristate "SMARTPA TFA9890 AUDIO"
 	depends on I2C
@@ -592,9 +590,6 @@ config SND_SOC_SMART_PA_TFA9890
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called  TFA9890 Smart pa
-=======
-config SOUND_CONTROL
-	bool "Sound control for wcd9335"
->>>>>>> 263c5be... ASoC: wcd9335: Sound control
-=======
->>>>>>> dcf575b... Switch to different sound control driver
+
+	
+
