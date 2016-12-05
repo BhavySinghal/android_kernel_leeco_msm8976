@@ -68,8 +68,7 @@ config CFQ_GROUP_IOSCHED
 	---help---
 	  Enable group IO scheduling in CFQ.
 
-<<<<<<< HEAD
-=======
+
 config IOSCHED_BFQ
 	tristate "BFQ I/O scheduler"
 	default n
@@ -99,7 +98,7 @@ config IOSCHED_FIOPS
           IOPS equally among all processes in the system. It's mainly for
           Flash based storage.
 
->>>>>>> a1e6343... block: fiops ioscheduler core
+
 choice
 	prompt "Default I/O scheduler"
 	default DEFAULT_CFQ
@@ -123,8 +122,7 @@ choice
 	config DEFAULT_CFQ
 		bool "CFQ" if IOSCHED_CFQ=y
 
-<<<<<<< HEAD
-=======
+
 	config DEFAULT_BFQ
 		bool "BFQ" if IOSCHED_BFQ=y
 		help
@@ -138,7 +136,7 @@ choice
 	config DEFAULT_FIOPS
 		bool "FIOPS" if IOSCHED_FIOPS=y
 
->>>>>>> a1e6343... block: fiops ioscheduler core
+
 	config DEFAULT_NOOP
 		bool "No-op"
 
@@ -152,11 +150,10 @@ config DEFAULT_IOSCHED
 	default "deadline" if DEFAULT_DEADLINE
 	default "row" if DEFAULT_ROW
 	default "cfq" if DEFAULT_CFQ
-<<<<<<< HEAD
-=======
+
 	default "bfq" if DEFAULT_BFQ
 	default "fiops" if DEFAULT_FIOPS
->>>>>>> a1e6343... block: fiops ioscheduler core
+
 	default "noop" if DEFAULT_NOOP
 	default "zen" if DEFAULT_ZEN
 
