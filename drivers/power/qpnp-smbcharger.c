@@ -39,19 +39,19 @@
 #include <linux/msm_bcl.h>
 #include <linux/ktime.h>
 #include "pmic-voter.h"
-<<<<<<< HEAD
+
 #include <linux/delay.h>
 #include <linux/wakelock.h>
 
 #define HVDCP_MANUAL_CURRENT_CONTROL 2700
-=======
+
 #include <linux/thermal.h>
 #include <linux/device.h>
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
 #include <linux/fastcharge.h>
 #endif
->>>>>>> 36ef5b4... USB fastcharge for kenzo
+
 
 /* Mask/Bit helpers */
 #define _SMB_MASK(BITS, POS) \
@@ -286,14 +286,11 @@ struct smbchg_chip {
 	struct delayed_work		current_adjust_work;
 	struct delayed_work		manual_current_control_work;
 	struct delayed_work		hvdcp_det_work;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
 	struct delayed_work		redetect_work;
->>>>>>> 848b5ef... Fix missing boardtemp thermal sensor
-=======
+
 	struct delayed_work		reg_work;
->>>>>>> fc8af67... Revert "Fix missing boardtemp thermal sensor"
+
 	spinlock_t			sec_access_lock;
 	struct mutex			therm_lvl_lock;
 	struct mutex			usb_set_online_lock;
@@ -8346,14 +8343,13 @@ static int smbchg_probe(struct spmi_device *spmi)
 	INIT_DELAYED_WORK(&chip->manual_current_control_work, smbchg_manual_current_control_work);
 
 	INIT_DELAYED_WORK(&chip->hvdcp_det_work, smbchg_hvdcp_det_work);
-<<<<<<< HEAD
-=======
+
+
+	
 	INIT_DELAYED_WORK(&chip->reg_work, smbchg_reg_work);
-<<<<<<< HEAD
+
 	INIT_DELAYED_WORK(&chip->redetect_work, smbchg_redetect_work);
->>>>>>> 848b5ef... Fix missing boardtemp thermal sensor
-=======
->>>>>>> fc8af67... Revert "Fix missing boardtemp thermal sensor"
+
 	init_completion(&chip->src_det_lowered);
 	init_completion(&chip->src_det_raised);
 	init_completion(&chip->usbin_uv_lowered);
@@ -8501,11 +8497,10 @@ static int smbchg_probe(struct spmi_device *spmi)
 
 	dump_regs(chip);
 	create_debugfs_entries(chip);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 	setup_timer(&adc_init_timer, adc_init_timer_fn,(unsigned long)chip);
 	mod_timer(&adc_init_timer, jiffies + msecs_to_jiffies(200));
-=======
+
 
 	rc = sysfs_create_file(&chip->dev->kobj, &attrs[0].attr);
 	if (rc < 0) {
@@ -8543,10 +8538,6 @@ static int smbchg_probe(struct spmi_device *spmi)
 		schedule_delayed_work(&chip->temp_work, msecs_to_jiffies(5000));
 	}
 #endif
->>>>>>> 848b5ef... Fix missing boardtemp thermal sensor
-
-=======
->>>>>>> fc8af67... Revert "Fix missing boardtemp thermal sensor"
 	dev_info(chip->dev,
 		"SMBCHG successfully probe Charger version=%s Revision DIG:%d.%d ANA:%d.%d batt=%d dc=%d usb=%d\n",
 			version_str[chip->schg_version],
