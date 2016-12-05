@@ -40,13 +40,10 @@ CONFIG_MODULE_SIG=y
 CONFIG_MODULE_SIG_FORCE=y
 CONFIG_MODULE_SIG_SHA512=y
 CONFIG_PARTITION_ADVANCED=y
-<<<<<<< HEAD:arch/arm64/configs/s2_defconfig
-=======
 CONFIG_IOSCHED_BFQ=y
 CONFIG_IOSCHED_FIOPS=y
 CONFIG_CGROUP_BFQIO=y
 CONFIG_DEFAULT_NOOP=y
->>>>>>> 4978579... hydrogen:enable fiops:arch/arm64/configs/hydrogen_user_defconfig
 CONFIG_ARCH_MSM=y
 CONFIG_ARCH_MSM8916=y
 #CONFIG_LEDS_MSM_GPIO_FLASH=y
@@ -72,13 +69,10 @@ CONFIG_CPU_FREQ_GOV_POWERSAVE=y
 CONFIG_CPU_FREQ_GOV_USERSPACE=y
 CONFIG_CPU_FREQ_GOV_ONDEMAND=y
 CONFIG_CPU_FREQ_GOV_INTERACTIVE=y
-<<<<<<< HEAD:arch/arm64/configs/s2_defconfig
-=======
 CONFIG_CPU_FREQ_GOV_ELEMENTALX
 CONFIG_CPU_FREQ_GOV_DARKNESS=y
 CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
 CONFIG_CPU_BOOST=y
->>>>>>> 696dc51... Hydrogen:Enable Governer:arch/arm64/configs/hydrogen_user_defconfig
 CONFIG_CPU_IDLE=y
 CONFIG_CPU_IDLE_MULTIPLE_DRIVERS=y
 CONFIG_NET=y
@@ -572,10 +566,8 @@ CONFIG_EXT2_FS=y
 CONFIG_EXT2_FS_XATTR=y
 CONFIG_EXT3_FS=y
 # CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
-=======
 CONFIG_MSM_TZ_LOG=y
 CONFIG_DYNAMIC_FSYNC=y
->>>>>>> 3198e21... Enable Powersuspend And Dynamic Fsync:arch/arm64/configs/hydrogen_user_defconfig
 CONFIG_EXT4_FS=y
 CONFIG_EXT4_FS_SECURITY=y
 CONFIG_FUSE_FS=y
@@ -631,12 +623,9 @@ CONFIG_CRYPTO_AES_ARM64_CE=y
 CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
 CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
 CONFIG_CRYPTO_AES_ARM64_NEON_BLK=y
-<<<<<<< HEAD:arch/arm64/configs/s2_defconfig
 CONFIG_MSM_PACMAN=y
-=======
 CONFIG_CRYPTO_CRC32_ARM64=y
 # CONFIG_MSM_PACMAN is not set
->>>>>>> c96114c... Add exFat support:arch/arm64/configs/hydrogen_user_defconfig
 CONFIG_MSM_TEST_PACMAN=y
 CONFIG_QMI_ENCDEC=y
 CONFIG_MOBICORE_SUPPORT=m
@@ -679,7 +668,6 @@ CONFIG_WLAN_FEATURE_11W=y
 CONFIG_QCOM_VOWIFI_11R=y
 CONFIG_ENABLE_LINUX_REG=y
 CONFIG_QCOM_TDLS=y
-=======
 CONFIG_ECRYPT_FS=y
 CONFIG_ENCRYPTED_KEYS=y
 CONFIG_CRYPTO_AES=y
@@ -691,8 +679,4 @@ CONFIG_CRYPTO_SEQIV=y
 CONFIG_NET_NS=y
 CONFIG_VETH=y
 CONFIG_CLUSTER_PLUG=y
-<<<<<<< HEAD:arch/arm64/configs/s2_defconfig
->>>>>>> cf04806... hydrogen:enable clusterplug:arch/arm64/configs/hydrogen_user_defconfig
-=======
 CONFIG_ADRENO_IDLER=y
->>>>>>> 5ea000b3... enable aderno idler:arch/arm64/configs/hydrogen_user_defconfig
