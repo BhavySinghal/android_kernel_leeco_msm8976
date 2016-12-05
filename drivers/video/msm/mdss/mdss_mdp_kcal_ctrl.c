@@ -22,39 +22,12 @@
 #include <linux/module.h>
 
 #include "mdss_mdp.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 #define DEF_PCC 0x100
-=======
-
-<<<<<<< HEAD
-#define NUM_QLUT 0x100
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-#define DEF_PCC 0x100
->>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 #define DEF_PA 0xff
 #define PCC_ADJ 0x80
 
 struct kcal_lut_data {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-=======
-#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS) && defined(CONFIG_FB)
-	struct mmi_notifier panel_nb;
-#elif defined(CONFIG_FB)
-	struct device dev;
-	struct notifier_block panel_nb;
-#endif
-	bool queue_changes;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	int red;
 	int green;
 	int blue;
@@ -65,31 +38,9 @@ struct kcal_lut_data {
 	int hue;
 	int val;
 	int cont;
-<<<<<<< HEAD
 };
 
 static uint32_t igc_inverted[IGC_LUT_ENTRIES] = {
-=======
-    int red;
-    int green;
-    int blue;
-    int minimum;
-    int enable;
-    int invert;
-    int sat;
-    int hue;
-    int val;
-    int cont;
-=======
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-};
-
-<<<<<<< HEAD
-static uint32_t igc_Table_Inverted[IGC_LUT_ENTRIES] = {
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-static uint32_t igc_inverted[IGC_LUT_ENTRIES] = {
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 	267390960, 266342368, 265293776, 264245184,
 	263196592, 262148000, 261099408, 260050816,
 	259002224, 257953632, 256905040, 255856448,
@@ -156,15 +107,7 @@ static uint32_t igc_inverted[IGC_LUT_ENTRIES] = {
 	3145776, 2097184, 1048592, 0
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
-=======
-static uint32_t igc_Table_RGB[IGC_LUT_ENTRIES] = {
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 	4080, 4064, 4048, 4032, 4016, 4000, 3984, 3968, 3952, 3936, 3920, 3904,
 	3888, 3872, 3856, 3840, 3824, 3808, 3792, 3776, 3760, 3744, 3728, 3712,
 	3696, 3680, 3664, 3648, 3632, 3616, 3600, 3584, 3568, 3552, 3536, 3520,
@@ -189,82 +132,34 @@ static uint32_t igc_rgb[IGC_LUT_ENTRIES] = {
 	48, 32, 16, 0
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 static int mdss_mdp_kcal_display_commit(void)
 {
 	int i;
 	int ret = 0;
-=======
-static bool mdss_mdp_kcal_is_panel_on(void)
-{
-	int i;
->>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
-=======
-static int mdss_mdp_kcal_display_commit(void)
-{
-	int i;
-	int ret = 0;
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	struct mdss_mdp_ctl *ctl;
 	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
 
 	for (i = 0; i < mdata->nctl; i++) {
 		ctl = mdata->ctl_off + i;
-<<<<<<< HEAD
-<<<<<<< HEAD
 		/* pp setup requires mfd */
 		if (mdss_mdp_ctl_is_power_on(ctl) && ctl->mfd &&
 				ctl->mfd->index == 0) {
-=======
-		/* pp setup requires mfd */
-<<<<<<< HEAD
-		if ((mdss_mdp_ctl_is_power_on(ctl)) && (ctl->mfd)) {
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-=======
-		if (mdss_mdp_ctl_is_power_on(ctl) && ctl->mfd &&
-				ctl->mfd->index == 0) {
->>>>>>> 2bf992c... msm: mdss: kcal: Only apply updates on index 0
 			ret = mdss_mdp_pp_setup(ctl);
 			if (ret)
 				pr_err("%s: setup failed: %d\n", __func__, ret);
 		}
-<<<<<<< HEAD
 	}
 
 	return ret;
 }
 
 static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
-=======
-static void mdss_mdp_pp_kcal_update(struct kcal_lut_data *lut_data)
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-=======
-		if (mdss_mdp_ctl_is_power_on(ctl))
-			return true;
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-	}
-
-	return ret;
-}
-
->>>>>>> f623783... msm: mdss: KCAL: Check panel power state before applying values
-static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
 {
 	u32 copyback = 0;
 	struct mdp_pcc_cfg_data pcc_config;
 
 	memset(&pcc_config, 0, sizeof(struct mdp_pcc_cfg_data));
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	lut_data->red = lut_data->red < lut_data->minimum ?
 		lut_data->minimum : lut_data->red;
 	lut_data->green = lut_data->green < lut_data->minimum ?
@@ -276,17 +171,6 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 	pcc_config.ops = lut_data->enable ?
 		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
-=======
-	pcc_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-<<<<<<< HEAD
-	pcc_config.ops = lut_data->enable ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-		MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-	pcc_config.ops = lut_data->enable ?
-		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 	pcc_config.r.r = lut_data->red * PCC_ADJ;
 	pcc_config.g.g = lut_data->green * PCC_ADJ;
 	pcc_config.b.b = lut_data->blue * PCC_ADJ;
@@ -294,11 +178,6 @@ static void mdss_mdp_kcal_update_pcc(struct kcal_lut_data *lut_data)
 	mdss_mdp_pcc_config(&pcc_config, &copyback);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 static void mdss_mdp_kcal_read_pcc(struct kcal_lut_data *lut_data)
 {
 	u32 copyback = 0;
@@ -322,16 +201,7 @@ static void mdss_mdp_kcal_read_pcc(struct kcal_lut_data *lut_data)
 	lut_data->blue = pcc_config.b.b / PCC_ADJ;
 }
 
-<<<<<<< HEAD
 static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
-=======
-static void mdss_mdp_pp_kcal_pa(struct kcal_lut_data *lut_data)
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-=======
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
 {
 	u32 copyback = 0;
 	struct mdp_pa_cfg_data pa_config;
@@ -342,24 +212,9 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 		memset(&pa_config, 0, sizeof(struct mdp_pa_cfg_data));
 
 		pa_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		pa_config.pa_data.flags = lut_data->enable ?
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
-=======
-		pa_config.pa_data.flags = MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE;
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-		pa_config.pa_data.flags = lut_data->enable ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-		pa_config.pa_data.flags = lut_data->enable ?
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		pa_config.pa_data.hue_adj = lut_data->hue;
 		pa_config.pa_data.sat_adj = lut_data->sat;
 		pa_config.pa_data.val_adj = lut_data->val;
@@ -370,24 +225,9 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 		memset(&pa_v2_config, 0, sizeof(struct mdp_pa_v2_cfg_data));
 
 		pa_v2_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		pa_v2_config.pa_v2_data.flags = lut_data->enable ?
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
-=======
-		pa_v2_config.pa_v2_data.flags = MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE;
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-		pa_v2_config.pa_v2_data.flags = lut_data->enable ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-		pa_v2_config.pa_v2_data.flags = lut_data->enable ?
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-				MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_HUE_ENABLE;
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_HUE_MASK;
 		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_SAT_ENABLE;
@@ -405,59 +245,7 @@ static void mdss_mdp_kcal_update_pa(struct kcal_lut_data *lut_data)
 	}
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
-=======
-static void mdss_mdp_pp_kcal_invert(struct kcal_lut_data *lut_data)
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
-=======
-static void mdss_mdp_kcal_read_pa(struct kcal_lut_data *lut_data)
-{
-	u32 copyback = 0;
-	struct mdp_pa_cfg_data pa_config;
-	struct mdp_pa_v2_cfg_data pa_v2_config;
-	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
-
-	if (mdata->mdp_rev < MDSS_MDP_HW_REV_103) {
-		memset(&pa_config, 0, sizeof(struct mdp_pa_cfg_data));
-
-		pa_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-		pa_config.pa_data.flags = MDP_PP_OPS_READ;
-
-		mdss_mdp_pa_config(&pa_config, &copyback);
-
-		lut_data->hue = pa_config.pa_data.hue_adj;
-		lut_data->sat = pa_config.pa_data.sat_adj;
-		lut_data->val = pa_config.pa_data.val_adj;
-		lut_data->cont = pa_config.pa_data.cont_adj;
-	} else {
-		memset(&pa_v2_config, 0, sizeof(struct mdp_pa_v2_cfg_data));
-
-		pa_v2_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-		pa_v2_config.pa_v2_data.flags = MDP_PP_OPS_READ;
-		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_HUE_ENABLE;
-		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_SAT_ENABLE;
-		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_VAL_ENABLE;
-		pa_v2_config.pa_v2_data.flags |= MDP_PP_PA_CONT_ENABLE;
-
-		mdss_mdp_pa_v2_config(&pa_v2_config, &copyback);
-
-		lut_data->hue = pa_v2_config.pa_v2_data.global_hue_adj;
-		lut_data->sat = pa_v2_config.pa_v2_data.global_sat_adj;
-		lut_data->val = pa_v2_config.pa_v2_data.global_val_adj;
-		lut_data->cont = pa_v2_config.pa_v2_data.global_cont_adj;
-	}
-}
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-=======
->>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
-static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
 {
 	u32 copyback = 0, copy_from_kernel = 1;
 	struct mdp_igc_lut_data igc_config;
@@ -465,21 +253,16 @@ static void mdss_mdp_kcal_update_igc(struct kcal_lut_data *lut_data)
 	memset(&igc_config, 0, sizeof(struct mdp_igc_lut_data));
 
 	igc_config.block = MDP_LOGICAL_BLOCK_DISP_0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	igc_config.ops = lut_data->invert && lut_data->enable ?
 		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
 			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
 	igc_config.len = IGC_LUT_ENTRIES;
 	igc_config.c0_c1_data = igc_inverted;
 	igc_config.c2_data = igc_rgb;
-<<<<<<< HEAD
 
 	mdss_mdp_igc_lut_config(&igc_config, &copyback, copy_from_kernel);
 }
 
-<<<<<<< HEAD
 static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 						const char *buf, size_t count)
 {
@@ -489,100 +272,14 @@ static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
 	r = sscanf(buf, "%d %d %d", &kcal_r, &kcal_g, &kcal_b);
 	if ((r != 3) || (kcal_r < 1 || kcal_r > 256) ||
 		(kcal_g < 1 || kcal_g > 256) || (kcal_b < 1 || kcal_b > 256))
-=======
-#include "mdss_mdp_kcal_ctrl.h"
-=======
-	igc_config.ops = lut_data->invert ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-=======
-	igc_config.ops = lut_data->invert && lut_data->enable ? MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-		MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
-=======
-	igc_config.ops = lut_data->invert && lut_data->enable ?
-		MDP_PP_OPS_WRITE | MDP_PP_OPS_ENABLE :
-			MDP_PP_OPS_WRITE | MDP_PP_OPS_DISABLE;
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-	igc_config.len = IGC_LUT_ENTRIES;
-	igc_config.c0_c1_data = &igc_Table_Inverted[0];
-	igc_config.c2_data = &igc_Table_RGB[0];
-=======
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-
-	mdss_mdp_igc_lut_config(&igc_config, &copyback, copy_from_kernel);
-}
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-
-static void mdss_mdp_kcal_check_pcc(struct kcal_lut_data *lut_data)
-{
-	lut_data->red = lut_data->red < lut_data->minimum ?
-		lut_data->minimum : lut_data->red;
-	lut_data->green = lut_data->green < lut_data->minimum ?
-		lut_data->minimum : lut_data->green;
-	lut_data->blue = lut_data->blue < lut_data->minimum ?
-		lut_data->minimum : lut_data->blue;
-}
-
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-static ssize_t kcal_store(struct device *dev, struct device_attribute *attr,
-						const char *buf, size_t count)
-{
-	int kcal_r, kcal_g, kcal_b, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-<<<<<<< HEAD
-	if (count > 12)
-		return -EINVAL;
-
-	sscanf(buf, "%d %d %d", &kcal_r, &kcal_g, &kcal_b);
-
-	if (kcal_r < 0 || kcal_r > 256)
-		return -EINVAL;
-
-	if (kcal_g < 0 || kcal_g > 256)
-		return -EINVAL;
-
-	if (kcal_b < 0 || kcal_b > 256)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	r = sscanf(buf, "%d %d %d", &kcal_r, &kcal_g, &kcal_b);
-<<<<<<< HEAD
-	if ((r != 3) || (kcal_r < 0 || kcal_r > 256) ||
-		(kcal_g < 0 || kcal_g > 256) || (kcal_b < 0 || kcal_b > 256))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-=======
-	if ((r != 3) || (kcal_r < 1 || kcal_r > 256) ||
-		(kcal_g < 1 || kcal_g > 256) || (kcal_b < 1 || kcal_b > 256))
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 		return -EINVAL;
 
 	lut_data->red = kcal_r;
 	lut_data->green = kcal_g;
 	lut_data->blue = kcal_b;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	kcal_apply_values(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
-	mdss_mdp_kcal_check_pcc(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pcc(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pcc(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -592,91 +289,26 @@ static ssize_t kcal_show(struct device *dev, struct device_attribute *attr,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_read_pcc(lut_data);
 
 	return scnprintf(buf, PAGE_SIZE, "%d %d %d\n",
 		lut_data->red, lut_data->green, lut_data->blue);
-=======
-	return sprintf(buf, "%d %d %d\n", lut_data->red, lut_data->green,
-		lut_data->blue);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
-		mdss_mdp_kcal_read_pcc(lut_data);
-=======
-	mdss_mdp_kcal_read_pcc(lut_data);
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-	return scnprintf(buf, PAGE_SIZE, "%d %d %d\n",
-		lut_data->red, lut_data->green, lut_data->blue);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_min_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_min, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_min);
 	if ((r) || (kcal_min < 1 || kcal_min > 256))
-=======
-	int kcal_min;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count > 4)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_min);
-
-	if (kcal_min < 0 || kcal_min > 256)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_min, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_min);
-<<<<<<< HEAD
-	if ((r) || (kcal_min < 0 || kcal_min > 256))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-=======
-	if ((r) || (kcal_min < 1 || kcal_min > 256))
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 		return -EINVAL;
 
 	lut_data->minimum = kcal_min;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	kcal_apply_values(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
-	mdss_mdp_kcal_check_pcc(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pcc(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pcc(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -686,87 +318,26 @@ static ssize_t kcal_min_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->minimum);
-=======
-	return sprintf(buf, "%d\n", lut_data->minimum);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->minimum);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_enable_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_enable, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_enable);
 	if ((r) || (kcal_enable != 0 && kcal_enable != 1) ||
 		(lut_data->enable == kcal_enable))
-=======
-	int kcal_enable;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count != 2)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_enable);
-
-	if (kcal_enable != 0 && kcal_enable != 1)
-		return -EINVAL;
-
-	if (lut_data->enable == kcal_enable)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_enable, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_enable);
-	if ((r) || (kcal_enable != 0 && kcal_enable != 1) ||
-		(lut_data->enable == kcal_enable))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->enable = kcal_enable;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
-<<<<<<< HEAD
-=======
-	mdss_mdp_pp_kcal_enable(lut_data->enable ? true : false);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_pp_kcal_update(lut_data);
->>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
-=======
-	mdss_mdp_kcal_update_pcc(lut_data);
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_update_igc(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on()) {
-		mdss_mdp_kcal_update_pcc(lut_data);
-		mdss_mdp_kcal_update_pa(lut_data);
-		mdss_mdp_kcal_update_igc(lut_data);
-	} else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -776,80 +347,24 @@ static ssize_t kcal_enable_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->enable);
-=======
-	return sprintf(buf, "%d\n", lut_data->enable);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->enable);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_invert_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_invert, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_invert);
 	if ((r) || (kcal_invert != 0 && kcal_invert != 1) ||
 		(lut_data->invert == kcal_invert))
-=======
-	int kcal_invert;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count != 2)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_invert);
-
-	if (kcal_invert != 0 && kcal_invert != 1)
-		return -EINVAL;
-
-	if (lut_data->invert == kcal_invert)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_invert, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_invert);
-	if ((r) || (kcal_invert != 0 && kcal_invert != 1) ||
-		(lut_data->invert == kcal_invert))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->invert = kcal_invert;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_invert(lut_data->invert);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_pp_kcal_invert(lut_data);
->>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
-=======
-	mdss_mdp_kcal_update_igc(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_igc(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_igc(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -859,79 +374,23 @@ static ssize_t kcal_invert_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	/* IGC lut does not support reading regs in kernel space yet */
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->invert);
-=======
-	return sprintf(buf, "%d\n", lut_data->invert);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->invert);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_sat_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_sat, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_sat);
 	if ((r) || ((kcal_sat < 224 || kcal_sat > 383) && kcal_sat != 128))
-=======
-	int kcal_sat;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count != 4)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_sat);
-
-	if ((kcal_sat < 224 || kcal_sat > 383) && kcal_sat != 128)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_sat, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_sat);
-	if ((r) || ((kcal_sat < 224 || kcal_sat > 383) && kcal_sat != 128))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->sat = kcal_sat;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_pa(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pa(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -941,80 +400,23 @@ static ssize_t kcal_sat_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->sat);
-=======
-	return sprintf(buf, "%d\n", lut_data->sat);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
-		mdss_mdp_kcal_read_pa(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-=======
->>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->sat);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_hue_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_hue, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_hue);
 	if ((r) || (kcal_hue < 0 || kcal_hue > 1536))
-=======
-	int kcal_hue;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count > 5)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_hue);
-
-	if (kcal_hue < 0 || kcal_hue > 1536)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_hue, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_hue);
-	if ((r) || (kcal_hue < 0 || kcal_hue > 1536))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->hue = kcal_hue;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_pa(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pa(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1024,80 +426,23 @@ static ssize_t kcal_hue_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->hue);
-=======
-	return sprintf(buf, "%d\n", lut_data->hue);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
-		mdss_mdp_kcal_read_pa(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-=======
->>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->hue);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_val_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_val, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_val);
 	if ((r) || (kcal_val < 128 || kcal_val > 383))
-=======
-	int kcal_val;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count != 4)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_val);
-
-	if (kcal_val < 128 || kcal_val > 383)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_val, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_val);
-	if ((r) || (kcal_val < 128 || kcal_val > 383))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->val = kcal_val;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_pa(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pa(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1107,80 +452,23 @@ static ssize_t kcal_val_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
-		mdss_mdp_kcal_read_pa(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->val);
-=======
-	return sprintf(buf, "%d\n", lut_data->val);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-=======
->>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->val);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 }
 
 static ssize_t kcal_cont_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int kcal_cont, r;
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
 	r = kstrtoint(buf, 10, &kcal_cont);
 	if ((r) || (kcal_cont < 128 || kcal_cont > 383))
-=======
-	int kcal_cont;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	if (count != 4)
-		return -EINVAL;
-
-	sscanf(buf, "%d", &kcal_cont);
-
-	if (kcal_cont < 128 || kcal_cont > 383)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	int kcal_cont, r;
-	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
-
-	r = kstrtoint(buf, 10, &kcal_cont);
-	if ((r) || (kcal_cont < 128 || kcal_cont > 383))
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
 		return -EINVAL;
 
 	lut_data->cont = kcal_cont;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_pa(lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
->>>>>>> ad8a561... msm: mdss: KCAL: Allow kcal_enable to control all post-processing features
-=======
-	if (mdss_mdp_kcal_is_panel_on())
-		mdss_mdp_kcal_update_pa(lut_data);
-	else
-		lut_data->queue_changes = true;
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	return count;
 }
@@ -1190,17 +478,6 @@ static ssize_t kcal_cont_show(struct device *dev,
 {
 	struct kcal_lut_data *lut_data = dev_get_drvdata(dev);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	if (mdss_mdp_kcal_is_panel_on() && lut_data->enable)
-		mdss_mdp_kcal_read_pa(lut_data);
-
->>>>>>> 598ea8d... msm: mdss: KCAL: Read values from MDP registers wherever possible
-=======
->>>>>>> 8ea8f01... msm: mdss: KCAL: Do not read from picture adjustment registers
 	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->cont);
 }
 
@@ -1211,62 +488,23 @@ static DEVICE_ATTR(kcal_enable, S_IWUSR | S_IRUGO, kcal_enable_show,
 static DEVICE_ATTR(kcal_invert, S_IWUSR | S_IRUGO, kcal_invert_show,
 	kcal_invert_store);
 static DEVICE_ATTR(kcal_sat, S_IWUSR | S_IRUGO, kcal_sat_show, kcal_sat_store);
-<<<<<<< HEAD
 static DEVICE_ATTR(kcal_hue, S_IWUSR | S_IRUGO, kcal_hue_show, kcal_hue_store);
 static DEVICE_ATTR(kcal_val, S_IWUSR | S_IRUGO, kcal_val_show, kcal_val_store);
 static DEVICE_ATTR(kcal_cont, S_IWUSR | S_IRUGO, kcal_cont_show,
 	kcal_cont_store);
 
 static int kcal_ctrl_probe(struct platform_device *pdev)
-=======
-	return sprintf(buf, "%d\n", lut_data->cont);
-=======
-	return scnprintf(buf, PAGE_SIZE, "%d\n", lut_data->cont);
->>>>>>> c02b437... msm: mdss: KCAL: Update according to linux guidelines and checkpatch.pl
-}
-
-static DEVICE_ATTR(kcal, S_IWUSR | S_IRUGO, kcal_show, kcal_store);
-static DEVICE_ATTR(kcal_min, S_IWUSR | S_IRUGO, kcal_min_show, kcal_min_store);
-static DEVICE_ATTR(kcal_enable, S_IWUSR | S_IRUGO, kcal_enable_show,
-	kcal_enable_store);
-static DEVICE_ATTR(kcal_invert, S_IWUSR | S_IRUGO, kcal_invert_show,
-	kcal_invert_store);
-static DEVICE_ATTR(kcal_sat, S_IWUSR | S_IRUGO,	kcal_sat_show, kcal_sat_store);
-=======
->>>>>>> 81d8cf8... msm: mdss: KCAL: Remove MODULE_DESCRIPTION
-static DEVICE_ATTR(kcal_hue, S_IWUSR | S_IRUGO, kcal_hue_show, kcal_hue_store);
-static DEVICE_ATTR(kcal_val, S_IWUSR | S_IRUGO, kcal_val_show, kcal_val_store);
-static DEVICE_ATTR(kcal_cont, S_IWUSR | S_IRUGO, kcal_cont_show,
-	kcal_cont_store);
-
-<<<<<<< HEAD
-static int __devinit kcal_ctrl_probe(struct platform_device *pdev)
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-static int kcal_ctrl_probe(struct platform_device *pdev)
->>>>>>> cd25252... msm: mdss: Remove deprecated __dev* markings
 {
 	int ret;
 	struct kcal_lut_data *lut_data;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	lut_data = devm_kzalloc(&pdev->dev, sizeof(*lut_data), GFP_KERNEL);
-=======
-	lut_data = kzalloc(sizeof(*lut_data), GFP_KERNEL);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	lut_data = devm_kzalloc(&pdev->dev, sizeof(*lut_data), GFP_KERNEL);
->>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
 	if (!lut_data) {
 		pr_err("%s: failed to allocate memory for lut_data\n",
 			__func__);
 		return -ENOMEM;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	platform_set_drvdata(pdev, lut_data);
 
 	lut_data->enable = 0x1;
@@ -1280,74 +518,10 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	lut_data->val = DEF_PA;
 	lut_data->cont = DEF_PA;
 
-<<<<<<< HEAD
 	mdss_mdp_kcal_update_pcc(lut_data);
 	mdss_mdp_kcal_update_pa(lut_data);
 	mdss_mdp_kcal_update_igc(lut_data);
 	mdss_mdp_kcal_display_commit();
-=======
-	mdss_mdp_pp_kcal_enable(true);
-
-	mdss_mdp_pp_kcal_update(NUM_QLUT, NUM_QLUT, NUM_QLUT);
-
-=======
->>>>>>> aa03911... msm: mdss: Replace PGC implementation with PCC for KCAL
-=======
-	platform_set_drvdata(pdev, lut_data);
-
-<<<<<<< HEAD
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-	lut_data->red = lut_data->green = lut_data->blue = NUM_QLUT;
-	lut_data->minimum = 35;
-	lut_data->enable = 1;
-	lut_data->invert = 0;
-=======
-	lut_data->enable = 0x1;
-	lut_data->red = DEF_PCC;
-	lut_data->green = DEF_PCC;
-	lut_data->blue = DEF_PCC;
-	lut_data->minimum = 0x23;
-	lut_data->invert = 0x0;
-	lut_data->hue = 0x0;
->>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
-	lut_data->sat = DEF_PA;
-	lut_data->val = DEF_PA;
-	lut_data->cont = DEF_PA;
-
-<<<<<<< HEAD
-	platform_set_drvdata(pdev, lut_data);
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-	lut_data->queue_changes = false;
-
-	mdss_mdp_kcal_update_pcc(lut_data);
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_update_igc(lut_data);
-
-#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
-	lut_data->panel_nb.display_on = mdss_mdp_kcal_update_queue;
-	lut_data->panel_nb.dev = &pdev->dev;
-	ret = mmi_panel_register_notifier(&lut_data->panel_nb);
-	if (ret) {
-		pr_err("%s: unable to register MMI notifier\n", __func__);
-		return ret;
-	}
-#elif defined(CONFIG_FB)
-	lut_data->dev = pdev->dev;
-	lut_data->panel_nb.notifier_call = fb_notifier_callback;
-	ret = fb_register_client(&lut_data->panel_nb);
-	if (ret) {
-		pr_err("%s: unable to register fb notifier\n", __func__);
-		return ret;
-	}
-#endif
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-=======
-	mdss_mdp_kcal_update_pcc(lut_data);
-	mdss_mdp_kcal_update_pa(lut_data);
-	mdss_mdp_kcal_update_igc(lut_data);
-	mdss_mdp_kcal_display_commit();
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 
 	ret = device_create_file(&pdev->dev, &dev_attr_kcal);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_min);
@@ -1357,12 +531,8 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_hue);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_val);
 	ret |= device_create_file(&pdev->dev, &dev_attr_kcal_cont);
-<<<<<<< HEAD
-<<<<<<< HEAD
 	if (ret) {
 		pr_err("%s: unable to create sysfs entries\n", __func__);
-<<<<<<< HEAD
-<<<<<<< HEAD
 		return ret;
 	}
 
@@ -1371,32 +541,6 @@ static int kcal_ctrl_probe(struct platform_device *pdev)
 
 static int kcal_ctrl_remove(struct platform_device *pdev)
 {
-=======
-	if (ret)
-=======
-	if (ret) {
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-		pr_err("%s: unable to create sysfs entries\n", __func__);
-		goto out_free_mem;
-=======
-		goto out_notifier;
->>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
-=======
-		return ret;
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-	}
-
-	return 0;
-}
-
-static int kcal_ctrl_remove(struct platform_device *pdev)
-{
-<<<<<<< HEAD
-	struct kcal_lut_data *lut_data = platform_get_drvdata(pdev);
-
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	device_remove_file(&pdev->dev, &dev_attr_kcal);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_min);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_enable);
@@ -1406,26 +550,6 @@ static int kcal_ctrl_remove(struct platform_device *pdev)
 	device_remove_file(&pdev->dev, &dev_attr_kcal_val);
 	device_remove_file(&pdev->dev, &dev_attr_kcal_cont);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-#if defined(CONFIG_MMI_PANEL_NOTIFICATIONS)
-	mmi_panel_unregister_notifier(&lut_data->panel_nb);
-#elif defined(CONFIG_FB)
-	fb_unregister_client(&lut_data->panel_nb);
-#endif
-
-<<<<<<< HEAD
->>>>>>> 301d4ee... msm: mdss: KCAL: Queue changes when panel is powered off
-	kfree(lut_data);
-
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
->>>>>>> 10cd680... msm: mdss: KCAL: Apply default values on boot
-=======
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
 	return 0;
 }
 
@@ -1460,23 +584,5 @@ static void __exit kcal_ctrl_exit(void)
 	platform_driver_unregister(&kcal_ctrl_driver);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 module_init(kcal_ctrl_init);
 module_exit(kcal_ctrl_exit);
-=======
-late_initcall(kcal_ctrl_init);
-=======
-module_init(kcal_ctrl_init);
->>>>>>> daf2812... msm: mdss: KCAL: Send a pp display commit when changes are made
-module_exit(kcal_ctrl_exit);
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-MODULE_DESCRIPTION("LCD KCAL Driver");
->>>>>>> 32793eb... msm: mdss: Add KCAL support for post processing control [v2]
-=======
-MODULE_DESCRIPTION("MDSS-MDP5 KCAL Driver");
->>>>>>> 343fb15... msm: mdss: Keep KCAL within its own source file
-=======
->>>>>>> 81d8cf8... msm: mdss: KCAL: Remove MODULE_DESCRIPTION
