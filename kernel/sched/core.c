@@ -2585,14 +2585,11 @@ unsigned long sched_get_busy(int cpu)
 	 * current task may have been executing for a long time. Ensure
 	 * that the window stats are current by doing an update.
 	 */
-<<<<<<< HEAD
-<<<<<<< HEAD
-	raw_spin_lock_irqsave(&rq->lock, flags);
-	update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_clock(), 0);
-=======
+
+	
 	raw_spin_lock_irqsave(&rq->lock, flags);
 	update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_ktime_clock(), 0);
->>>>>>> 7d0c1d8... Revert "impulse governer"
+
 	load = rq->old_busy_time = rq->prev_runnable_sum;
 
 	/*
@@ -2615,8 +2612,7 @@ unsigned long sched_get_busy(int cpu)
 	} else {
 		load = scale_load_to_freq(load, cpu_max_freq(cpu),
 					 cpu_max_possible_freq(cpu));
-<<<<<<< HEAD
-=======
+
 	local_irq_save(flags);
  	for_each_cpu(cpu, query_cpus)
  		raw_spin_lock(&cpu_rq(cpu)->lock);
@@ -2637,9 +2633,7 @@ for_each_cpu(cpu, query_cpus) {
  		load[i] = scale_load_to_cpu(load[i], cpu);
  
  		notifier_sent[i] = rq->notifier_sent;
->>>>>>> 250f7cb... impulse governer
-=======
->>>>>>> 7d0c1d8... Revert "impulse governer"
+
 		rq->notifier_sent = 0;
 	}
 
